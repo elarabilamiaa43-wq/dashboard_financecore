@@ -3,6 +3,7 @@
 
 # sen
 financecore_db.env
+.env
 
 # dt file
 data/*
