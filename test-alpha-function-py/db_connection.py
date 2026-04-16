@@ -68,4 +68,4 @@ def create_database_if_not_exists():
  
     except Exception as e:
         logger.error(f"Error while checking/creating database: {e}")
-        raisedotenv
+        raise
