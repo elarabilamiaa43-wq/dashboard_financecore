@@ -1,0 +1,18 @@
+# sys
+.DS_Store
+.vscode
+
+# sen
+error_core.env
+.env
+# dt file
+data/*
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+
+#log info
+automation.log
