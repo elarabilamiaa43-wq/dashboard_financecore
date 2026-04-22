@@ -1,31 +1,3 @@
-"""
-app.py  —  STREAMLIT-DASHBOARD/
-─────────────────────────────────
-Entry point and home page for the FinanceCore dashboard.
-
-Why app.py is the entry point:
-  `streamlit run app.py` is the launch command. Streamlit then scans
-  the `pages/` subdirectory and registers any .py file it finds there
-  as a navigation page. The numeric prefix (1_, 2_) controls the order
-  in the sidebar nav and is stripped from the display name.
-
-Why st.set_page_config() lives here and only here:
-  It must be the very first Streamlit call in the entire app.
-  It can only be called once per session. Placing it in app.py
-  guarantees it runs before any page module is imported.
-
-Why layout="wide":
-  Dashboard pages use st.columns() for side-by-side KPI cards and
-  charts. The default "centered" layout caps content at ~700px —
-  too narrow for 4-column metric rows and dual-panel chart layouts.
-
-Home page role:
-  Shows the global unfiltered KPIs (from vue_kpi_global, already in
-  the DB from ANALYTICS-SQL/views.sql) + DB connection status.
-  Gives the user an immediate "state of the portfolio" before they
-  navigate to a detail page.
-"""
-#_____________________
 import sys
 import os
 
@@ -56,9 +28,6 @@ st.markdown(
 )
 st.markdown("---")
 
-# ── DB connection status ──────────────────────────────────────────
-# Test on the home page so credential errors surface immediately
-# with a clear message rather than a traceback inside a chart.
 col_status, col_nav = st.columns([1, 1])
 
 with col_status:
@@ -83,11 +52,6 @@ with col_nav:
 
 st.markdown("---")
 
-# ── Global KPI snapshot (from vue_kpi_global — no filters) ────────
-# These come from the view created by ANALYTICS-SQL/views.sql.
-# They represent the FULL portfolio, not the filtered view —
-# intentional: the home page gives the executive a portfolio-wide
-# snapshot before they apply any drill-down filters.
 st.markdown("#### Snapshot global du portefeuille")
 
 try:

@@ -1,15 +1,7 @@
-# sys
-.DS_Store
-.vscode
-# sen
-error_core.env
 .env
-# dt file
-data/*
-# Python
+test2.env
 venv/
 __pycache__/
 *.pyc
 *.pyo
-#log info
-automation.log
+.DS_Store

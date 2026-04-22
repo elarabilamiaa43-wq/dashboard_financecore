@@ -1,9 +1,3 @@
-"""
-pages/1_vue_executive.py  —  STREAMLIT-DASHBOARD/pages/
-─────────────────────────────────────────────────────────
-Page 1: Vue Exécutive.
-"""
-
 import streamlit as st
 import plotly.express as px
 from database_pipeline_py.dash_app.utils.filters import render_sidebar
@@ -112,12 +106,6 @@ st.plotly_chart(fig_line, use_container_width=True)
 
 st.markdown("---")
 
-# ─────────────────────────────────────────────────────────────────
-# 3. BAR CHARTS — CA by agence and by produit (side by side)
-#
-# FIX: replaced the "$4" placeholder with the proper `with col_ag:`
-#      block. "$4" was a template variable that was never substituted,
-#      causing a SyntaxError at parse time.
 # ─────────────────────────────────────────────────────────────────
 st.subheader("📊 Chiffre d'affaires")
 

@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Reuse get_engine from the pipeline — same .env, same credentials.
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'DATABASE-PIPELINE-PY'))
 from database_pipeline_py.db_connection import get_engine as _get_engine
 
@@ -38,17 +38,7 @@ def get_engine():
 
 
 def _ensure_views(engine):
-    """
-    Creates (or replaces) all 7 KPI views from ANALYTICS-SQL/views.sql.
-
-    FIX: The original code used engine.connect() + execution_options() which
-    in SQLAlchemy 2.x does not reliably apply AUTOCOMMIT to DDL statements.
-    We now use engine.begin() which wraps everything in an explicit transaction
-    and commits on exit — DDL (CREATE OR REPLACE VIEW) is auto-committed by
-    PostgreSQL when issued inside a transaction block.
-    We also strip comment-only lines before splitting on ';' to avoid passing
-    empty/comment fragments to execute().
-    """
+    
     if not _VIEWS_SQL.exists():
         logger.warning(f"views.sql not found at {_VIEWS_SQL}. Views will not be created.")
         return
@@ -57,15 +47,13 @@ def _ensure_views(engine):
 
     sql_text = _VIEWS_SQL.read_text(encoding='utf-8')
 
-    # Strip single-line SQL comments before splitting so we don't get
-    # comment-only "statements" that confuse the CREATE check.
+    
     lines = [ln for ln in sql_text.splitlines() if not ln.strip().startswith('--')]
     clean_sql = '\n'.join(lines)
     statements = [s.strip() for s in clean_sql.split(';') if s.strip()]
 
     try:
-        # engine.begin() opens a connection, starts a transaction, and
-        # automatically commits on __exit__ (or rolls back on exception).
+        
         with engine.begin() as conn:
             for stmt in statements:
                 if stmt.upper().lstrip().startswith('CREATE'):
@@ -116,19 +104,7 @@ def get_kpi_global() -> dict:
 
 @st.cache_data(ttl=300)
 def get_transactions(agences, produits, segments, year_min, year_max) -> pd.DataFrame:
-    """
-    FIX: replaced SELECT * with an explicit column list.
-
-    Using SELECT * across 4 JOINed tables produces duplicate column names
-    (e.g. client_id appears in both transactions and clients, produit appears
-    in both transactions and produits, date_transaction in both transactions
-    and temps).  When pandas reads a result with duplicate column names it
-    stacks them into a 2-D array-like column, which breaks groupby() with
-    "Grouper for 'X' not 1-dimensional".
-
-    The explicit list below selects every useful column exactly once,
-    using table-qualified aliases where names clash.
-    """
+    
     logger.info("Fetching filtered transactions...")
 
     sql = """

@@ -1,9 +1,3 @@
-"""
-pages/2_risk_analysis.py  —  STREAMLIT-DASHBOARD/pages/
-─────────────────────────────────────────────────────────
-Page 2: Analyse des Risques.
-"""
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -42,16 +36,6 @@ if df.empty:
     st.warning("Aucune donnée pour les filtres sélectionnés.")
     st.stop()
 
-# ─────────────────────────────────────────────────────────────────
-# SAFETY GUARD — deduplicate columns
-#
-# FIX: if get_transactions ever returns duplicate column names
-# (e.g. from a future SELECT * join), pandas silently stacks them
-# into 2-D array columns which break groupby() with
-# "Grouper for 'X' not 1-dimensional".
-# Dropping duplicate columns here ensures this page is robust
-# regardless of upstream query changes. The root cause is already
-# fixed in db.py (explicit column list), but this guard stays cheap.
 # ─────────────────────────────────────────────────────────────────
 df = df.loc[:, ~df.columns.duplicated()]
 
